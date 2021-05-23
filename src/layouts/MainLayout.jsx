@@ -2,10 +2,10 @@ import React from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, ...props }) => {
   return (
-    <div>
-      <Header />
+    <div className='fullHeight'>
+      <Header {...props} />
       <div className='main'>{children}</div>
       <Footer />
     </div>

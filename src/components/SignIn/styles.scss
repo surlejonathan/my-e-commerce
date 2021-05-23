@@ -1,0 +1,33 @@
+.signin {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid black;
+
+  .wrap {
+    padding: 10px;
+
+    h2 {
+      margin: 0 auto;
+      padding-bottom: 24px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+  }
+
+  .socialSignIn {
+    .row {
+      position: relative;
+
+      .icon {
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        -webkit-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        transform: translateY(-50%);
+      }
+    }
+  }
+}

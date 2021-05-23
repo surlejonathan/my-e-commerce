@@ -1,10 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "./styles.scss";
 
 import Logo from "../../assets/MODE.png";
+import { auth } from "../../firebase/utils";
 
-const Header = (props) => {
+const Header = ({ currentUser }) => {
+  const signOut = () => {
+    auth.signOut();
+  };
+
   return (
     <header className='header'>
       <div className='wrap'>
@@ -13,12 +18,26 @@ const Header = (props) => {
             <img src={Logo} alt='My E-Commerce logo' />
           </Link>
         </div>
-        <div className='linkToRegistration'>
-          <Link to='/registration'>Register</Link>
-        </div>
+        {!currentUser ? (
+          <>
+            <div className='linkToRegistration'>
+              <Link to='/registration'>Register</Link>
+            </div>
+            <div className='linkToLogin'>
+              <Link to='/login'>Login</Link>
+            </div>
+          </>
+        ) : (
+          <div className='linkToLogin'>
+            <Link onClick={signOut}>Logout</Link>
+          </div>
+        )}
       </div>
     </header>
   );
 };
 
+Header.defaultProps = {
+  currentUser: null,
+};
 export default Header;
