@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Button from "../forms/Button";
 import FormInput from "../forms/FormInput";
+
 import "./styles.scss";
 import { FcGoogle } from "react-icons/fc";
 import { auth, signInWithGoogle } from "../../firebase/utils";
+import AuthWrapper from "../AuthWrapper";
 
 const SignIn = (props) => {
   const initialState = {
@@ -30,46 +33,48 @@ const SignIn = (props) => {
     }
   };
 
+  const authWrapperProps = {
+    headline: "Sign In",
+  };
+
   return (
-    <div className='signin'>
-      <div className='wrap'>
-        <h2>Login</h2>
-      </div>
-      <div className='formWrap'>
-        <form onSubmit={handleSubmit}>
-          <div className='emailPasswordSignIn'>
-            <FormInput
-              type='email'
-              name='email'
-              value={email}
-              placeholder='your email'
-              label='Email'
-              handleChange={handleChange}
-            />
-            <FormInput
-              type='password'
-              name='password'
-              value={password}
-              placeholder='Your password'
-              label='Password'
-              handleChange={handleChange}
-            />
-            <Button type='submit'>Sign in</Button>
-          </div>
-          <div>
-            <p style={{ textAlign: "center" }}>OR</p>
-          </div>
-          <div className='socialSignIn'>
-            <div className='row'>
-              <div className='icon'>
-                <FcGoogle size={20} />
-              </div>
-              <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+    <AuthWrapper {...authWrapperProps}>
+      <form onSubmit={handleSubmit}>
+        <div className='emailPasswordSignIn'>
+          <FormInput
+            type='email'
+            name='email'
+            value={email}
+            placeholder='your email'
+            label='Email'
+            handleChange={handleChange}
+          />
+          <FormInput
+            type='password'
+            name='password'
+            value={password}
+            placeholder='Your password'
+            label='Password'
+            handleChange={handleChange}
+          />
+          <Button type='submit'>Sign in</Button>
+        </div>
+        <div>
+          <p style={{ textAlign: "center" }}>OR</p>
+        </div>
+        <div className='socialSignIn'>
+          <div className='row'>
+            <div className='icon'>
+              <FcGoogle size={20} />
             </div>
+            <Button onClick={signInWithGoogle}>Sign in with Google</Button>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
+        <div className='recoveryLink'>
+          <Link to='/recovery'>I forgot my password</Link>
+        </div>
+      </form>
+    </AuthWrapper>
   );
 };
 

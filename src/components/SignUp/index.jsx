@@ -3,6 +3,7 @@ import FormInput from "../forms/FormInput";
 import Button from "../forms/Button";
 import { auth, handleUserProfile } from "../../firebase/utils";
 import "./styles.scss";
+import AuthWrapper from "../AuthWrapper";
 
 const SignUp = () => {
   const initialState = {
@@ -47,53 +48,50 @@ const SignUp = () => {
   };
 
   return (
-    <div className='signup'>
-      <div className='wrap'>
-        <h2>Sign Up</h2>
-        {errors.length > 0 && (
-          <ul className='errors'>
-            {errors.map((error, index) => (
-              <li key={index}>{error}</li>
-            ))}
-          </ul>
-        )}
-        <form onSubmit={handleSubmit}>
-          <FormInput
-            type='text'
-            name='displayName'
-            value={displayName}
-            placeholder='full name'
-            label='Full name'
-            handleChange={handleChange}
-          />
-          <FormInput
-            type='email'
-            name='email'
-            value={email}
-            placeholder='your email'
-            label='Email'
-            handleChange={handleChange}
-          />
-          <FormInput
-            type='password'
-            name='password'
-            value={password}
-            placeholder='8 characters min'
-            label='Password'
-            handleChange={handleChange}
-          />
-          <FormInput
-            type='password'
-            name='confirmPassword'
-            value={confirmPassword}
-            placeholder='confirm your password'
-            label='Confirm password'
-            handleChange={handleChange}
-          />
-          <Button>Register</Button>
-        </form>
-      </div>
-    </div>
+    <AuthWrapper headline='Sign Up'>
+      {errors.length > 0 && (
+        <ul className='errors'>
+          {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      )}
+      <form onSubmit={handleSubmit}>
+        <FormInput
+          type='text'
+          name='displayName'
+          value={displayName}
+          placeholder='full name'
+          label='Full name'
+          handleChange={handleChange}
+        />
+        <FormInput
+          type='email'
+          name='email'
+          value={email}
+          placeholder='your email'
+          label='Email'
+          handleChange={handleChange}
+        />
+        <FormInput
+          type='password'
+          name='password'
+          value={password}
+          placeholder='8 characters min'
+          label='Password'
+          handleChange={handleChange}
+        />
+        <FormInput
+          type='password'
+          name='confirmPassword'
+          value={confirmPassword}
+          placeholder='confirm your password'
+          label='Confirm password'
+          handleChange={handleChange}
+        />
+        <Button>Register</Button>
+      </form>
+    </AuthWrapper>
   );
 };
 

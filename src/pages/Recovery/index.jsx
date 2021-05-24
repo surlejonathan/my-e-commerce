@@ -1,10 +1,11 @@
 import React from "react";
+import RecoveryForm from "../../components/RecoveryForm";
 import "./styles.scss";
 
 const Recovery = (props) => {
   return (
     <div className='recovery'>
-      <h1>Password recovery</h1>
+      <RecoveryForm />
     </div>
   );
 };
