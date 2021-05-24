@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Button from "../forms/Button";
 import FormInput from "../forms/FormInput";
 
@@ -14,6 +14,8 @@ const SignIn = (props) => {
     password: "",
   };
 
+  const history = useHistory();
+
   const [inputValues, setInputValues] = useState(initialState);
 
   const { email, password } = inputValues;
@@ -26,8 +28,9 @@ const SignIn = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      auth.signInWithEmailAndPassword(email, password);
+      await auth.signInWithEmailAndPassword(email, password);
       setInputValues(initialState);
+      history.push("/");
     } catch (err) {
       console.log(err);
     }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import FormInput from "../forms/FormInput";
 import Button from "../forms/Button";
 import { auth, handleUserProfile } from "../../firebase/utils";
@@ -13,6 +14,8 @@ const SignUp = () => {
     confirmPassword: "",
     errors: [],
   };
+
+  const history = useHistory();
 
   const [inputValues, setInputValues] = useState(initialState);
 
@@ -42,6 +45,7 @@ const SignUp = () => {
       );
       await handleUserProfile(user, { displayName });
       setInputValues(initialState);
+      history.push("/");
     } catch (err) {
       console.log(err);
     }

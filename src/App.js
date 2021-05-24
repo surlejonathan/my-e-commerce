@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "./redux/User/user.actions";
 
@@ -11,6 +11,10 @@ import Homepage from "./pages/Homepage";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import Recovery from "./pages/Recovery";
+import Dashboard from "./pages/Dashboard";
+
+// hoc
+import WithAuth from "./hoc/withAuth";
 
 // Firebase
 
@@ -25,13 +29,15 @@ function App() {
   const dispatch = useDispatch();
   const setCurrentUser = (currentUser) => dispatch(setUser(currentUser));
 
+  const history = useHistory();
   useEffect(() => {
     const authListener = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth);
-        userRef.onSnapshot((snapshot) =>
-          setCurrentUser({ id: snapshot.id, ...snapshot.data() })
-        );
+        userRef.onSnapshot((snapshot) => {
+          setCurrentUser({ id: snapshot.id, ...snapshot.data() });
+          history.push("/");
+        });
       } else {
         setCurrentUser(userAuth);
       }
@@ -46,46 +52,44 @@ function App() {
           path='/'
           exact
           component={() => (
-            <HomepageLayout currentUser={currentUser}>
+            <HomepageLayout>
               <Homepage />
             </HomepageLayout>
           )}
         />
         <Route
           path='/registration'
-          component={() =>
-            currentUser ? (
-              <Redirect to='/' />
-            ) : (
-              <MainLayout>
-                <Registration />
-              </MainLayout>
-            )
-          }
+          component={() => (
+            <MainLayout>
+              <Registration />
+            </MainLayout>
+          )}
         />
         <Route
           path='/login'
-          component={() =>
-            currentUser ? (
-              <Redirect to='/' />
-            ) : (
-              <MainLayout>
-                <Login />
-              </MainLayout>
-            )
-          }
+          component={() => (
+            <MainLayout>
+              <Login />
+            </MainLayout>
+          )}
         />
         <Route
           path='/recovery'
-          component={() =>
-            currentUser ? (
-              <Redirect to='/' />
-            ) : (
+          component={() => (
+            <MainLayout>
+              <Recovery />
+            </MainLayout>
+          )}
+        />
+        <Route
+          path='/dashboard'
+          component={() => (
+            <WithAuth>
               <MainLayout>
-                <Recovery />
+                <Dashboard />
               </MainLayout>
-            )
-          }
+            </WithAuth>
+          )}
         />
       </Switch>
     </div>
