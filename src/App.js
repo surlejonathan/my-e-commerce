@@ -26,16 +26,17 @@ function App() {
   const setCurrentUser = (currentUser) => dispatch(setUser(currentUser));
 
   useEffect(() => {
-    auth.onAuthStateChanged(async (userAuth) => {
+    const authListener = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth);
         userRef.onSnapshot((snapshot) =>
           setCurrentUser({ id: snapshot.id, ...snapshot.data() })
         );
       } else {
-        setCurrentUser(null);
+        setCurrentUser(userAuth);
       }
     });
+    return () => authListener();
   }, []);
 
   return (
