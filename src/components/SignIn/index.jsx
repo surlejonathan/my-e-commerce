@@ -1,13 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../forms/Button";
+import FormInput from "../forms/FormInput";
 import "./styles.scss";
 import { FcGoogle } from "react-icons/fc";
-import { signInWithGoogle } from "../../firebase/utils";
+import { auth, signInWithGoogle } from "../../firebase/utils";
 
 const SignIn = (props) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const initialState = {
+    email: "",
+    password: "",
   };
+
+  const [inputValues, setInputValues] = useState(initialState);
+
+  const { email, password } = inputValues;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputValues({ ...inputValues, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      auth.signInWithEmailAndPassword(email, password);
+      setInputValues(initialState);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className='signin'>
       <div className='wrap'>
@@ -15,6 +37,28 @@ const SignIn = (props) => {
       </div>
       <div className='formWrap'>
         <form onSubmit={handleSubmit}>
+          <div className='emailPasswordSignIn'>
+            <FormInput
+              type='email'
+              name='email'
+              value={email}
+              placeholder='your email'
+              label='Email'
+              handleChange={handleChange}
+            />
+            <FormInput
+              type='password'
+              name='password'
+              value={password}
+              placeholder='Your password'
+              label='Password'
+              handleChange={handleChange}
+            />
+            <Button type='submit'>Sign in</Button>
+          </div>
+          <div>
+            <p style={{ textAlign: "center" }}>OR</p>
+          </div>
           <div className='socialSignIn'>
             <div className='row'>
               <div className='icon'>

@@ -28,9 +28,14 @@ const Header = ({ currentUser }) => {
             </div>
           </>
         ) : (
-          <div className='linkToLogin'>
-            <Link onClick={signOut}>Logout</Link>
-          </div>
+          <>
+            <div className='userGreeting'>
+              <Link>Hi, {currentUser.displayName} !</Link>
+            </div>
+            <div className='linkToLogin'>
+              <Link onClick={signOut}>Logout</Link>
+            </div>
+          </>
         )}
       </div>
     </header>

@@ -8,6 +8,7 @@ import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
+import Recovery from "./pages/Recovery";
 
 // Firebase
 
@@ -34,6 +35,7 @@ function App() {
     });
   }, []);
 
+  console.log(currentUser);
   return (
     <div className='App'>
       <Switch>
@@ -48,20 +50,36 @@ function App() {
         />
         <Route
           path='/registration'
-          component={() => (
-            <MainLayout currentUser={currentUser}>
-              <Registration />
-            </MainLayout>
-          )}
+          component={() =>
+            currentUser ? (
+              <Redirect to='/' />
+            ) : (
+              <MainLayout currentUser={currentUser}>
+                <Registration />
+              </MainLayout>
+            )
+          }
         />
         <Route
-          to='/login'
-          render={() =>
+          path='/login'
+          component={() =>
             currentUser ? (
               <Redirect to='/' />
             ) : (
               <MainLayout currentUser={currentUser}>
                 <Login />
+              </MainLayout>
+            )
+          }
+        />
+        <Route
+          path='/recovery'
+          component={() =>
+            currentUser ? (
+              <Redirect to='/' />
+            ) : (
+              <MainLayout currentUser={currentUser}>
+                <Recovery />
               </MainLayout>
             )
           }
