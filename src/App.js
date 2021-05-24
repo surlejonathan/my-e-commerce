@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "./redux/User/user.actions";
 
 // Layout
 import MainLayout from "./layouts/MainLayout";
@@ -19,8 +21,9 @@ import "./default.scss";
 import HomepageLayout from "./layouts/HomepageLayout";
 
 function App() {
-  const initialState = null;
-  const [currentUser, setCurrentUser] = useState(initialState);
+  const currentUser = useSelector(({ user }) => user.currentUser);
+  const dispatch = useDispatch();
+  const setCurrentUser = (currentUser) => dispatch(setUser(currentUser));
 
   useEffect(() => {
     auth.onAuthStateChanged(async (userAuth) => {
@@ -30,12 +33,11 @@ function App() {
           setCurrentUser({ id: snapshot.id, ...snapshot.data() })
         );
       } else {
-        setCurrentUser(initialState);
+        setCurrentUser(null);
       }
     });
   }, []);
 
-  console.log(currentUser);
   return (
     <div className='App'>
       <Switch>
@@ -54,7 +56,7 @@ function App() {
             currentUser ? (
               <Redirect to='/' />
             ) : (
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Registration />
               </MainLayout>
             )
@@ -66,7 +68,7 @@ function App() {
             currentUser ? (
               <Redirect to='/' />
             ) : (
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Login />
               </MainLayout>
             )
@@ -78,7 +80,7 @@ function App() {
             currentUser ? (
               <Redirect to='/' />
             ) : (
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Recovery />
               </MainLayout>
             )

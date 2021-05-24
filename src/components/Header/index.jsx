@@ -1,14 +1,18 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import "./styles.scss";
 
 import Logo from "../../assets/MODE.png";
 import { auth } from "../../firebase/utils";
+import { user } from "../../redux/User/user.reducer";
 
-const Header = ({ currentUser }) => {
+const Header = () => {
   const signOut = () => {
     auth.signOut();
   };
+
+  const currentUser = useSelector(user);
 
   return (
     <header className='header'>
@@ -42,7 +46,4 @@ const Header = ({ currentUser }) => {
   );
 };
 
-Header.defaultProps = {
-  currentUser: null,
-};
 export default Header;
