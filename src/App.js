@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { Switch, Route, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { setUser } from "./redux/User/user.actions";
 
 // Layout
@@ -25,9 +25,7 @@ import "./default.scss";
 import HomepageLayout from "./layouts/HomepageLayout";
 
 function App() {
-  const currentUser = useSelector(({ user }) => user.currentUser);
   const dispatch = useDispatch();
-  const setCurrentUser = (currentUser) => dispatch(setUser(currentUser));
 
   const history = useHistory();
   useEffect(() => {
@@ -35,11 +33,11 @@ function App() {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth);
         userRef.onSnapshot((snapshot) => {
-          setCurrentUser({ id: snapshot.id, ...snapshot.data() });
+          dispatch(setUser({ id: snapshot.id, ...snapshot.data() }));
           history.push("/");
         });
       } else {
-        setCurrentUser(userAuth);
+        dispatch(setUser(userAuth));
       }
     });
     return () => authListener();

@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../forms/Button";
 import FormInput from "../forms/FormInput";
 
 import "./styles.scss";
 import { FcGoogle } from "react-icons/fc";
-import { auth, signInWithGoogle } from "../../firebase/utils";
+import {
+  signInWithEmailAndPassword,
+  signInWithGoogle,
+} from "../../redux/User/user.actions";
+import { useDispatch } from "react-redux";
 import AuthWrapper from "../AuthWrapper";
 
 const SignIn = (props) => {
@@ -14,7 +18,7 @@ const SignIn = (props) => {
     password: "",
   };
 
-  const history = useHistory();
+  const dispatch = useDispatch();
 
   const [inputValues, setInputValues] = useState(initialState);
 
@@ -25,15 +29,13 @@ const SignIn = (props) => {
     setInputValues({ ...inputValues, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      setInputValues(initialState);
-      history.push("/");
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(signInWithEmailAndPassword({ email, password }));
+  };
+
+  const handleSignInWithGoogle = () => {
+    dispatch(signInWithGoogle());
   };
 
   const authWrapperProps = {
@@ -70,7 +72,9 @@ const SignIn = (props) => {
             <div className='icon'>
               <FcGoogle size={20} />
             </div>
-            <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+            <Button onClick={handleSignInWithGoogle}>
+              Sign in with Google
+            </Button>
           </div>
         </div>
         <div className='recoveryLink'>

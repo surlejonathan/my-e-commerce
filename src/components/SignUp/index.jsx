@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import AuthWrapper from "../AuthWrapper";
+import { signUp } from "../../redux/User/user.actions";
 import FormInput from "../forms/FormInput";
 import Button from "../forms/Button";
-import { auth, handleUserProfile } from "../../firebase/utils";
 import "./styles.scss";
-import AuthWrapper from "../AuthWrapper";
 
 const SignUp = () => {
   const initialState = {
@@ -15,40 +15,28 @@ const SignUp = () => {
     errors: [],
   };
 
-  const history = useHistory();
-
   const [inputValues, setInputValues] = useState(initialState);
 
   const { displayName, email, password, confirmPassword, errors } = inputValues;
+
+  const dispatch = useDispatch();
+
+  const signUpErrors = useSelector(({ user }) => user.signUpErrors);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputValues({ ...inputValues, [name]: value });
   };
 
+  useEffect(() => {
+    if (signUpErrors.length > 0) {
+      setInputValues({ ...inputValues, errors: signUpErrors });
+    }
+  }, [signUpErrors]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password.length < 8) {
-      const err = ["Password must be at least 8 characters"];
-      setInputValues({ ...inputValues, errors: err });
-      return;
-    }
-    if (confirmPassword !== password) {
-      const err = ["Passwords don't match"];
-      setInputValues({ ...inputValues, errors: err });
-      return;
-    }
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      await handleUserProfile(user, { displayName });
-      setInputValues(initialState);
-      history.push("/");
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(signUp({ displayName, email, password, confirmPassword }));
   };
 
   return (
